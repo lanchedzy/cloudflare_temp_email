@@ -180,6 +180,9 @@ onMounted(async () => {
                   FROM: {{ row.source }}
                 </n-tag>
                 <n-tag type="info">
+                  TO: {{ row.address }}
+                </n-tag>
+                <n-tag type="info">
                   ID: {{ row.id }}
                 </n-tag>
               </n-space>

@@ -308,6 +308,9 @@ const fetchMailUnknowData = async () => {
                     FROM: {{ row.source }}
                   </n-tag>
                   <n-tag type="info">
+                    TO: {{ row.address }}
+                  </n-tag>
+                  <n-tag type="info">
                     ID: {{ row.id }}
                   </n-tag>
                 </n-space>
@@ -336,6 +339,9 @@ const fetchMailUnknowData = async () => {
                 <n-space>
                   <n-tag type="info">
                     FROM: {{ row.source }}
+                  </n-tag>
+                  <n-tag type="info">
+                    TO: {{ row.address }}
                   </n-tag>
                   <n-tag type="info">
                     ID: {{ row.id }}

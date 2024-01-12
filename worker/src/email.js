@@ -36,22 +36,31 @@ async function email(message, env, ctx) {
             parsedEmail = await parser.parse(rawEmail);
         }
 
+				let messageFrom = parsedEmail.from.text;
+				let messageFromAddress = parsedEmail.from.value[0].address;
+				let messageTo = parsedEmail.to.text;
+				if (env.BLACK_LIST && env.BLACK_LIST.split(",").some(word => messageFrom.includes(word))) {
+					message.setReject("Missing from address");
+					console.log(`Reject message from ${messageFrom} to ${messageTo}`);
+					return;
+				}
+
         const { success } = await env.DB.prepare(
             `INSERT INTO mails (source, address, subject, message) VALUES (?, ?, ?, ?)`
         ).bind(
-            message.from, message.to,
+            messageFrom, messageTo,
             parsedEmail.subject || "",
             parsedEmail.html || parsedEmail.textAsHtml || parsedEmail.text || ""
         ).run();
         if (!success) {
-            message.setReject(`Failed save message to ${message.to}`);
-            console.log(`Failed save message from ${message.from} to ${message.to}`);
+            message.setReject(`Failed save message to ${messageTo}`);
+            console.log(`Failed save message from ${messageFrom} to ${messageTo}`);
         }
         try {
             const results = await env.DB.prepare(
                 `SELECT * FROM auto_reply_mails where address = ? and enabled = 1`
-            ).bind(message.to).first();
-            if (results && results.source_prefix && message.from.startsWith(results.source_prefix)) {
+            ).bind(messageTo).first();
+            if (results && results.source_prefix && messageFrom.startsWith(results.source_prefix)) {
                 const msg = createMimeMessage();
                 msg.setHeader("In-Reply-To", message.headers.get("Message-ID"));
                 msg.setSender({
@@ -67,7 +76,7 @@ async function email(message, env, ctx) {
 
                 const replyMessage = new EmailMessage(
                     message.to,
-                    message.from,
+										message.from,
                     msg.asRaw()
                 );
                 await message.reply(replyMessage);
@@ -76,8 +85,8 @@ async function email(message, env, ctx) {
             console.log("reply email error", error);
         }
     } else {
-        message.setReject(`Unknown address ${message.to}`);
-        console.log(`Unknown address ${message.to}`);
+        message.setReject(`Unknown address ${messageTo}`);
+        console.log(`Unknown address ${messageTo}`);
     }
 }
 
