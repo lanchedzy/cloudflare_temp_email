@@ -39,6 +39,11 @@ async function email(message, env, ctx) {
 				let messageFrom = parsedEmail.from.text;
 				let messageFromAddress = parsedEmail.from.value[0].address;
 				let messageTo = parsedEmail.to.text;
+				let result = parsedEmail.to.text.match(/<(.*)>/);
+				if (result) {
+					messageTo = result[0]
+				}
+
 				if (env.BLACK_LIST && env.BLACK_LIST.split(",").some(word => messageFrom.includes(word))) {
 					message.setReject("Missing from address");
 					console.log(`Reject message from ${messageFrom} to ${messageTo}`);
