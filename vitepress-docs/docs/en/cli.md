@@ -34,10 +34,10 @@ git clone https://github.com/dreamhunter2333/cloudflare_temp_email.git
 ```bash
 # create a database, and copy the output to wrangler.toml in the next step
 wrangler d1 create dev
-wrangler d1 execute dev --file=db/schema.sql
+wrangler d1 execute dev --file=db/schema.sql --remote
 # schema update, if you have initialized the database before this date, you can execute this command to update
-# wrangler d1 execute dev --file=db/2024-01-13-patch.sql
-# wrangler d1 execute dev --file=db/2024-04-03-patch.sql
+# wrangler d1 execute dev --file=db/2024-01-13-patch.sql --remote
+# wrangler d1 execute dev --file=db/2024-04-03-patch.sql --remote
 # create a namespace, and copy the output to wrangler.toml in the next step
 wrangler kv:namespace create DEV
 ```
@@ -85,9 +85,16 @@ PREFIX = "tmp" # The mailbox name prefix to be processed
 # ADMIN_PASSWORDS = ["123", "456"]
 # admin contact information. If not configured, it will not be displayed. Any string can be configured.
 # ADMIN_CONTACT = "xx@xx.xxx"
-DOMAINS = ["xxx.xxx1" , "xxx.xxx2"] # your domain name
+DEFAULT_DOMAINS = ["xxx.xxx1" , "xxx.xxx2"] # domain name for no role users
+DOMAINS = ["xxx.xxx1" , "xxx.xxx2"] # all your domain name
 # For chinese domain name, you can use DOMAIN_LABELS to show chinese domain name
 # DOMAIN_LABELS = ["中文.xxx", "xxx.xxx2"]
+# USER_DEFAULT_ROLE = "vip" # default role for new users(only when enable mail verification)
+# User roles configuration, if domains is empty will use default_domains, if prefix is null will use default prefix, if prefix is empty string will not use prefix
+# USER_ROLES = [
+#    { domains = ["xxx.xxx1" , "xxx.xxx2"], role = "vip", prefix = "vip" },
+#    { domains = ["xxx.xxx1" , "xxx.xxx2"], role = "admin", prefix = "" },
+# ]
 JWT_SECRET = "xxx" # Key used to generate jwt
 BLACK_LIST = "" # Blacklist, used to filter senders, comma separated
 # Allow users to create email addresses

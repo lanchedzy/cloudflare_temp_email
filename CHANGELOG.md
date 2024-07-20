@@ -1,10 +1,21 @@
 <!-- markdownlint-disable-file MD004 MD024 MD034 MD036 -->
 # CHANGE LOG
 
-## main branch
+## v0.6.0
+
+### Breaking Changes
+
+DB changes: 增加用户角色表, 需要执行 `db/2024-07-14-patch.sql` 更新 `D1` 数据库
+
+### Changes
+
+worker 配置文件新增 `DEFAULT_DOMAINS`, `USER_ROLES`, `USER_DEFAULT_ROLE`, 具体查看文档 [worker配置](https://temp-mail-docs.awsl.uk/zh/guide/cli/worker.html#%E4%BF%AE%E6%94%B9-wrangler-toml-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6)
 
 - 移除 `apiV1` 相关代码和相关的数据库表
 - 更新 `admin/statistics` api, 添加用户统计信息
+- 更新地址的规则，只允许小写+数字，对于历史的地址在查询邮件时会进行 `lowercase` 处理
+- 增加用户角色功能，`admin` 可以设置用户角色(目前可配置每个角色域名和前缀)
+- admin 页面搜索优化, 回车自动搜索, 输入内容自动 trim
 
 ## v0.5.4
 
@@ -302,7 +313,7 @@ The `mails` table will be discarded, and the `raw` text of the new `mail` will b
 ```bash
 git checkout v0.2.0
 cd worker
-wrangler d1 execute dev  --file=../db/2024-04-09-patch.sql
+wrangler d1 execute dev  --file=../db/2024-04-09-patch.sql --remote
 pnpm run deploy
 cd ../frontend
 pnpm run deploy

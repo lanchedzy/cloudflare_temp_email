@@ -2,7 +2,7 @@ import { Hono } from 'hono'
 
 import { HonoCustomType } from "../types";
 import { getBooleanValue, getJsonSetting, checkCfTurnstile } from '../utils';
-import { newAddress, handleListQuery, deleteAddressWithData } from '../common'
+import { newAddress, handleListQuery, deleteAddressWithData, getAddressPrefix, getAllowDomains } from '../common'
 import { CONSTANTS } from '../constants'
 import auto_reply from './auto_reply'
 import webhook_settings from './webhook_settings';
@@ -38,9 +38,10 @@ api.delete('/api/mails/:id', async (c) => {
     }
     const { address } = c.get("jwtPayload")
     const { id } = c.req.param();
+    // TODO: add toLowerCase() to handle old data
     const { success } = await c.env.DB.prepare(
         `DELETE FROM raw_mails WHERE address = ? and id = ? `
-    ).bind(address, id).run();
+    ).bind(address.toLowerCase(), id).run();
     return c.json({
         success: success
     })
@@ -117,7 +118,8 @@ api.post('/api/new_address', async (c) => {
         console.error(error);
     }
     try {
-        const res = await newAddress(c, name, domain, true);
+        const addressPrefix = await getAddressPrefix(c);
+        const res = await newAddress(c, name, domain, true, true, addressPrefix);
         return c.json(res);
     } catch (e) {
         return c.text(`Failed create address: ${(e as Error).message}`, 400)
