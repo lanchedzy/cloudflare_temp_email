@@ -77,6 +77,7 @@ node_compat = true
 # TITLE = "Custom Title" # The title of the site
 PREFIX = "tmp" # The mailbox name prefix to be processed
 # (min, max) length of the adderss, if not set, the default is (1, 30)
+# ANNOUNCEMENT = "Custom Announcement"
 # MIN_ADDRESS_LEN = 1
 # MAX_ADDRESS_LEN = 30
 # If you want your site to be private, uncomment below and change your password
@@ -90,6 +91,7 @@ DOMAINS = ["xxx.xxx1" , "xxx.xxx2"] # all your domain name
 # For chinese domain name, you can use DOMAIN_LABELS to show chinese domain name
 # DOMAIN_LABELS = ["中文.xxx", "xxx.xxx2"]
 # USER_DEFAULT_ROLE = "vip" # default role for new users(only when enable mail verification)
+# ADMIN_USER_ROLE = "admin" # the role which can access admin panel
 # User roles configuration, if domains is empty will use default_domains, if prefix is null will use default prefix, if prefix is empty string will not use prefix
 # USER_ROLES = [
 #    { domains = ["xxx.xxx1" , "xxx.xxx2"], role = "vip", prefix = "vip" },

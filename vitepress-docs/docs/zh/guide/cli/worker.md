@@ -45,6 +45,7 @@ node_compat = true
 # TITLE = "Custom Title" # 自定义网站标题
 PREFIX = "tmp" # 要处理的邮箱名称前缀，不需要后缀可配置为空字符串
 # (min, max) adderss的长度，如果不设置，默认为(1, 30)
+# ANNOUNCEMENT = "Custom Announcement" # 自定义公告
 # MIN_ADDRESS_LEN = 1
 # MAX_ADDRESS_LEN = 30
 # 如果你想要你的网站私有，取消下面的注释，并修改密码
@@ -59,6 +60,8 @@ DOMAINS = ["xxx.xxx1" , "xxx.xxx2"] # 你的域名, 支持多个域名
 # DOMAIN_LABELS = ["中文.xxx", "xxx.xxx2"]
 # 新用户默认角色, 仅在启用邮件验证时有效
 # USER_DEFAULT_ROLE = "vip"
+# admin 角色配置, 如果用户角色等于 ADMIN_USER_ROLE 则可以访问 admin 控制台
+# ADMIN_USER_ROLE = "admin" # the role which can access admin panel
 # 用户角色配置, 如果 domains 为空将使用 default_domains
 # 如果 prefix 为 null 将使用默认前缀, 如果 prefix 为空字符串将不使用前缀
 # USER_ROLES = [

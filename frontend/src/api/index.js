@@ -4,7 +4,7 @@ import axios from 'axios'
 const API_BASE = import.meta.env.VITE_API_BASE || "";
 const {
     loading, auth, jwt, settings, openSettings,
-    userOpenSettings, userSettings,
+    userOpenSettings, userSettings, announcement,
     showAuth, adminAuth, showAdminAuth, userJwt
 } = useGlobalState();
 
@@ -22,6 +22,7 @@ const apiFetch = async (path, options = {}) => {
             data: options.body || null,
             headers: {
                 'x-user-token': userJwt.value,
+                'x-user-access-token': userSettings.value.access_token,
                 'x-custom-auth': auth.value,
                 'x-admin-auth': adminAuth.value,
                 'Authorization': `Bearer ${jwt.value}`,
@@ -56,6 +57,7 @@ const getOpenSettings = async (message) => {
         const res = await api.fetch("/open_api/settings");
         const domainLabels = res["domainLabels"] || [];
         Object.assign(openSettings.value, {
+            ...res,
             title: res["title"] || "",
             prefix: res["prefix"] || "",
             minAddressLen: res["minAddressLen"] || 1,
@@ -80,6 +82,14 @@ const getOpenSettings = async (message) => {
         });
         if (openSettings.value.needAuth) {
             showAuth.value = true;
+        }
+        if (openSettings.value.announcement && openSettings.value.announcement != announcement.value) {
+            announcement.value = openSettings.value.announcement;
+            message.info(announcement.value, {
+                showIcon: false,
+                duration: 0,
+                closable: true
+            });
         }
     } catch (error) {
         message.error(error.message || "error");
